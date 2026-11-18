@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SKY EDU iBT 시험</title><meta name="robots" content="noindex">
+</head><body style="margin:0;font:16px -apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f4f6fa">
+<div id="ld" style="padding:70px 20px;text-align:center;color:#13294b"><b>SKY EDU iBT 시험</b><br><small>불러오는 중…</small></div>
+<script>
+(function(){
+var API="https://script.google.com/macros/s/AKfycbyzou7IH1gMt1zT9vzpjz0wOc08cq2amm4rXvT2ab1oZbONkmozkzp-9IgKh5HK8_MjKg/exec";
+/* 쿠키 없이(익명으로) 부르므로 폰에 구글 계정이 여러 개 로그인돼 있어도 열립니다 */
+function call(fn,args){return fetch(API,{method:"POST",credentials:"omit",redirect:"follow",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args||[]})})
+  .then(function(r){if(!r.ok)throw new Error("서버 "+r.status);return r.json()}).then(function(j){if(!j||!j.ok)throw new Error((j&&j.err)||"서버 오류");return j.r})}
+function runner(ok,fail){return new Proxy({},{get:function(_,k){
+  if(k==="withSuccessHandler")return function(f){return runner(f,fail)};
+  if(k==="withFailureHandler")return function(f){return runner(ok,f)};
+  return function(){var a=[].slice.call(arguments);var tries=0;(function go(){call(k,a).then(function(r){ok&&ok(r)}).catch(function(e){if(++tries<3&&/Failed to fetch|NetworkError|서버 5/.test(String(e&&e.message)))return setTimeout(go,1200*tries);fail&&fail(e)})})()}}})}
+var params={};try{new URLSearchParams(location.search).forEach(function(v,k){params[k]=v})}catch(e){}
+window.google={script:{get run(){return runner(null,null)},url:{getLocation:function(cb){cb({parameter:params,parameters:{},hash:location.hash.slice(1)})}},host:{close:function(){}}}};
+window.__ENTRY=location.origin+location.pathname;
+call("getApp",[]).then(function(h){if(!h){document.getElementById("ld").innerHTML="시험 화면이 아직 준비되지 않았습니다. 선생님께 말씀하세요.";return}
+  document.open();document.write(h);document.close()})
+ .catch(function(e){document.getElementById("ld").innerHTML="불러오지 못했습니다. 인터넷 연결을 확인하고 새로 고침해 주세요.<br><small>"+(e&&e.message||e)+"</small><br><br><button onclick='location.reload()' style='font-size:16px;padding:10px 18px'>다시 시도</button>"});
+})();
+</script></body></html>
